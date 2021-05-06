@@ -28,8 +28,12 @@ main {
 
 .color-code {
     font-family: 'Fira Code', monospace;
-    font-weight: bold;
+    font-size: 1.2em;
     letter-spacing: 2px;
     outline: none;
     cursor: default;
+}
+
+.btn {
+    width: 3em;
 }
