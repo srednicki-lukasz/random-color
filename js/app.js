@@ -1,39 +1,66 @@
-let hex = '#000000';
-let colorCode = document.querySelector('.color-code');
+// Set initial values.
+window.onload = () => document.querySelector('.color').value = '#FFFFFF';
 
-const preview = document.querySelector('.preview');
-const btnCopyCss = document.querySelector('.copy-css');
-const btnCopyHex = document.querySelector('.copy-hex');
+class RandomColor {
 
-// change background color
-preview.addEventListener('click', () => {
-    hex = '#';
-    const chars = ['A', 'B', 'C', 'D', 'E', 'F', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    
-    for (let i = 0; i < 6; i++) {
-        hex += chars[Math.floor(Math.random() * chars.length)];
+    /**
+     * Color.
+     * Initial - #FFFFFF
+     * @memberof RandomColor
+     */
+    color = '#FFFFFF';
+
+    constructor() {}
+
+    /**
+     * Generate random color.
+     * @memberof RandomColor
+     */
+    generateRandomColor() {
+        this.color = '#';
+
+        const availableCharacters = [
+            'A', 'B', 'C', 'D', 'E', 'F',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        ];
+
+        for (let i = 0; i < 6; i++) {
+            this.color += availableCharacters[
+                Math.floor(Math.random() * availableCharacters.length)
+            ];
+        }
+
+        return this.color;
     }
 
-    colorCode.value = hex;
-    preview.style.background = hex;
+    /**
+     * Copy CSS code.
+     * @memberof RandomColor
+     */
+    copyCSS() {
+        const input = document.createElement('input');
+
+        input.value = `background-color: ${this.color};`;
+        document.body.appendChild(input);
+
+        input.select();
+        input.setSelectionRange(0, 99999);
+
+        document.execCommand('copy');
+        document.body.removeChild(input);
+
+        alert('CSS code copied!');
+    }
+}
+
+const randomColor = new RandomColor();
+
+document.querySelector('main').addEventListener('click', () => {
+    const color = randomColor.generateRandomColor();
+
+    document.querySelector('.color').value = color;
+
+    document.querySelector('main').style.backgroundColor = `${color}`;
 });
 
-// copy to clipboard
-btnCopyCss.addEventListener('click', () => {
-    let input = document.createElement('input');
-    input.value = `background-color: ${hex}`;
-    document.body.appendChild(input);
-    input.select();
-    input.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    document.body.removeChild(input);
-    alert('CSS code copied!');
-});
-
-btnCopyHex.addEventListener('click', () => {
-    colorCode.select();
-    colorCode.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    colorCode.setSelectionRange(0, 0)
-    alert('Hex code copied!');
-});
+document.querySelector('.btn-copy-css').addEventListener('click', () => randomColor.copyCSS());
